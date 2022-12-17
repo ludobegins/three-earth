@@ -11,5 +11,8 @@
   "devDependencies": {
     "vite": "^4.0.0",
     "vite-plugin-string": "^1.2.1"
+  },
+  "dependencies": {
+    "gsap": "^3.11.3"
   }
 }
