@@ -1,4 +1,4 @@
-import { SphereGeometry } from 'three'
+import { Float32BufferAttribute, SphereGeometry } from 'three'
 import './style.css'
 
 import * as THREE from 'three' // TO DO: optimize imports for bundle
@@ -61,6 +61,27 @@ scene.add(atmosphere)
 const group = new THREE.Group()
 group.add(sphere)
 scene.add(group)
+
+// stars
+
+const starGeometry = new THREE.BufferGeometry()
+const starMaterial = new THREE.PointsMaterial({color: 0xffffff})
+
+const starVertices = []
+
+for (let i = 0; i < 10000; i++){
+  const x = (Math.random() - 0.5) * 2000
+  const y = (Math.random() - 0.5) * 2000
+  const z = - Math.random() * 2000
+  starVertices.push(x, y, z)
+}
+
+console.log(starVertices)
+
+starGeometry.setAttribute('position', new THREE.Float32BufferAttribute(starVertices, 3))
+
+const stars = new THREE.Points(starGeometry, starMaterial)
+scene.add(stars)
 
 camera.position.z = 15
 
