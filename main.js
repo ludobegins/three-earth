@@ -1,5 +1,5 @@
 import * as THREE from 'three' // TO DO: optimize imports for bundle
-import gsap from 'gsap' // animation library
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 
 import vertexShader from './shaders/vertex.glsl'
 import fragmentShader from './shaders/fragment.glsl'
@@ -87,24 +87,13 @@ const mouse = {
   y: 0
 }
 
+const controls = new OrbitControls(camera, canvasContainer)
+
 function animate() {
   requestAnimationFrame( animate )
   renderer.render(scene, camera)
   sphere.rotation.y += 0.002
-  // gsap: smooth mouse movement
-  gsap.to(group.rotation, {
-    y: mouse.x * 0.5,
-    x: - mouse.y * 0.5,
-    duration: 2
-  })
+  controls.update()
 }
 
 animate()
-
-
-// get normalized mouse coordinates
-
-addEventListener('mousemove', (e) => {
-  mouse.x = ( e.clientX / innerWidth ) * 2 - 1
-  mouse.y = - ( e.clientY / innerHeight ) * 2 + 1
-})
