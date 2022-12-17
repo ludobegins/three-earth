@@ -135,6 +135,8 @@ function selectLoc(){
   overlay.classList.remove('hidden')
 
   overlay.querySelector('h1').innerHTML = 'Natal'
+  overlay.querySelector('.img-wrapper').innerHTML = "<img src='img/natal.jpg'>"
+  overlay.querySelector('.overlay-p').innerHTML = 'Natal means Christmas, and we actually go there every Christmas. Beautiful beaches and quality time with the family!'
 }
 
 function unselectLoc(){

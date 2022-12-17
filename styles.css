@@ -83,3 +83,19 @@ blockquote p {
 .hidden {
   display: none;
 }
+
+.overlay-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 80px;
+}
+
+img {
+  width: 400px;
+}
+
+.overlay-p{
+  font-size: 1.5rem;
+}
