@@ -1,7 +1,7 @@
 @import url("https://use.typekit.net/jmk3xov.css");
 
 :root {
-  --dark-bg: black;
+  --dark-bg: rgba(15, 15, 15, 0.97);
 
   font-family: brandon-grotesque, sans-serif;
   font-weight: 400;
@@ -30,7 +30,7 @@ body {
 
 .text {
   width: 50%;
-  background: var(--dark-bg);
+  background: black;
 }
 
 #canvasContainer {
@@ -68,4 +68,18 @@ blockquote p {
 .sub-text p {
   font-size: 2rem;
   margin: 0;
+}
+
+.location {
+  height: 100%;
+  width: 50%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  background-color: var(--dark-bg);
+}
+
+.hidden {
+  display: none;
 }

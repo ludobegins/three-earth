@@ -10,7 +10,9 @@ import atmosphereFragmentShader from './shaders/atmosphereFragment.glsl'
 const canvasContainer = document.querySelector('#canvasContainer')
 
 const EARTH_RADIUS = 6
-const EARTH_ROTATION = 0.002
+const LOC_NAME = 'loc'
+const EARTH_BASE_ROTATION = 0.001
+let earthRotation = EARTH_BASE_ROTATION
 
 const scene = new THREE.Scene()
 const camera = new THREE.PerspectiveCamera( 75, canvasContainer.offsetWidth / canvasContainer.offsetHeight, 0.1, 1000 )
@@ -43,6 +45,7 @@ const sphere = new THREE.Mesh(
     }
   })
 )
+sphere.name = 'earth'
 
 // atmosphere
 
@@ -85,13 +88,14 @@ scene.add(stars)
 
 // locations
 
-const locGeometry = new THREE.SphereBufferGeometry(0.08, 24, 24)
+const locGeometry = new THREE.SphereGeometry(0.08, 24, 24)
 const locMaterial = new THREE.MeshStandardMaterial({color: 0xFF0000})
 
-const loc = new THREE.Mesh( locGeometry, locMaterial )
+const loc = new THREE.Mesh( locGeometry, locMaterial)
+loc.name = LOC_NAME
 
-let lat = 18
-let lon = -2
+let lat = -5.88
+let lon = -35.17
 
 lat = ( lat ) * Math.PI / 180
 lon = ( lon ) * Math.PI / 180 + Math.PI / 2
@@ -107,10 +111,13 @@ scene.add(loc)
 
 // ambient light
 
-const light = new THREE.AmbientLight( 0x404040 );
+const light = new THREE.AmbientLight( 0x404040 )
 scene.add( light );
 
 camera.position.z = 15
+
+const raycaster = new THREE.Raycaster()
+const mouseVec = new THREE.Vector2()
 
 const mouse = {
   x: 0,
@@ -119,11 +126,52 @@ const mouse = {
 
 const controls = new OrbitControls(camera, canvasContainer)
 
+let selectedLoc = null;
+
+function selectLoc(){
+  earthRotation = 0;
+  selectedLoc.geometry = new THREE.SphereGeometry(0.2, 24, 24)
+  const overlay = document.querySelector('.location');
+  overlay.classList.remove('hidden')
+
+  overlay.querySelector('h1').innerHTML = 'Natal'
+}
+
+function unselectLoc(){
+  earthRotation = EARTH_BASE_ROTATION
+}
+
+function onClick(event){
+  raycaster.setFromCamera(mouseVec, camera)
+  let intersects = raycaster.intersectObjects(scene.children)
+  if (intersects.length > 0) {
+    selectedLoc = intersects[0].object
+    console.log(selectedLoc.name)
+    console.log(selectedLoc.geometry)
+    if (selectedLoc.name === LOC_NAME){
+      selectLoc()
+    }
+  }
+}
+
+function onMouseMove ( event ) {
+
+  mouseVec.x = ( event.clientX / canvasContainer.offsetWidth ) * 2 - 3
+  mouseVec.y = - ( event.clientY / canvasContainer.offsetHeight ) * 2 + 1
+
+}
+
+
+
+canvasContainer.addEventListener('mousemove', onMouseMove, false)
+canvasContainer.addEventListener('click', onClick)
+
+
 function animate() {
   requestAnimationFrame( animate )
   renderer.render(scene, camera)
 
-  sphere.rotation.y += EARTH_ROTATION
+  sphere.rotation.y += earthRotation
 
   loc.position.set(
     locX * Math.cos(sphere.rotation.y) + locZ * Math.sin(sphere.rotation.y),
