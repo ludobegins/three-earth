@@ -49,7 +49,6 @@ h1, h2, h3, blockquote {
 }
 
 header {
-    grid-column: 2 / span 5;
     font-size: 2.5rem;
     padding: 2rem;
 }
@@ -60,4 +59,13 @@ blockquote p {
   font-size: 4rem;
   display: inline;
   line-height: 1;
+}
+
+.sub-text {
+  padding: 10px 40px;
+}
+
+.sub-text p {
+  font-size: 2rem;
+  margin: 0;
 }
