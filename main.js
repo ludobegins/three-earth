@@ -104,7 +104,6 @@ const locX = Math.cos(lat) * Math.sin(lon) * EARTH_RADIUS
 const locY = Math.sin(lat) * EARTH_RADIUS
 const locZ = Math.cos(lat) * Math.cos(lon) * EARTH_RADIUS
 
-console.log('x,y,z:', locX, locY, locZ)
 
 loc.position.set(locX, locY, locZ)
 scene.add(loc)
