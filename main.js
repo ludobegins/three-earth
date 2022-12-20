@@ -19,25 +19,19 @@ const scene = new THREE.Scene()
 const camera = new THREE.PerspectiveCamera( 75, canvasContainer.offsetWidth / canvasContainer.offsetHeight, 0.1, 1000 )
 
 const renderer = new THREE.WebGLRenderer({
-  // sharpen rendering, smoother
-  antialias: true,
+  antialias: true, // sharpen rendering, smoother
   canvas: document.querySelector('canvas')
 })
 
 renderer.setSize(canvasContainer.offsetWidth, canvasContainer.offsetHeight)
-
-// better resolution
 renderer.setPixelRatio(window.devicePixelRatio)
 
 // sphere
 
 const sphere = new THREE.Mesh(
   new THREE.SphereGeometry(EARTH_RADIUS, 50, 50),
-  // new THREE.MeshBasicMaterial({
-  //   map: new THREE.TextureLoader().load('img/earth_uv.jpg')
-  // })
   new THREE.ShaderMaterial({
-    vertexShader: vertexShader, // JS tip: could write only 'vertexShader'
+    vertexShader,
     fragmentShader,
     uniforms: {
       globeTexture: {
@@ -92,22 +86,54 @@ scene.add(stars)
 const locGeometry = new THREE.SphereGeometry(0.08, 24, 24)
 const locMaterial = new THREE.MeshStandardMaterial({color: 0xFF0000})
 
-const loc = new THREE.Mesh( locGeometry, locMaterial)
-loc.name = LOC_NAME
+let locationsList = new Array()
+let locXYZList = new Array()
 
-let lat = locations[0].lat
-let lon = locations[0].lon
+function addLocation(index){
+  let loc = new THREE.Mesh( locGeometry, locMaterial)
+  loc.name = LOC_NAME
 
-lat = ( lat ) * Math.PI / 180
-lon = ( lon ) * Math.PI / 180 + Math.PI / 2
+  let lat = locations[index].lat
+  let lon = locations[index].lon
 
-const locX = Math.cos(lat) * Math.sin(lon) * EARTH_RADIUS
-const locY = Math.sin(lat) * EARTH_RADIUS
-const locZ = Math.cos(lat) * Math.cos(lon) * EARTH_RADIUS
+  let locX, locY, locZ
+  
+  [locX, locY, locZ] = coordsToXYZ(lat, lon)
+  locXYZList.push([locX, locY, locZ])
+  
+  loc.position.set(locX, locY, locZ)
+  scene.add(loc)
 
+  locationsList.push(loc)
+}
 
-loc.position.set(locX, locY, locZ)
-scene.add(loc)
+function coordsToXYZ(lat, lon){
+  lat = ( lat ) * Math.PI / 180
+  lon = ( lon ) * Math.PI / 180 + Math.PI / 2
+  
+  const locX = Math.cos(lat) * Math.sin(lon) * EARTH_RADIUS
+  const locY = Math.sin(lat) * EARTH_RADIUS
+  const locZ = Math.cos(lat) * Math.cos(lon) * EARTH_RADIUS
+
+  return [locX, locY, locZ]
+}
+
+for (let i = 0; i < locations.length; i++){
+  addLocation(i)
+}
+
+function rotateLocation(loc, i){
+  const locX = locXYZList[i][0]
+  const locY = locXYZList[i][1]
+  const locZ = locXYZList[i][2]
+
+  loc.position.set(
+    locX * Math.cos(sphere.rotation.y) + locZ * Math.sin(sphere.rotation.y),
+    locY,
+    - locX * Math.sin(sphere.rotation.y) + locZ * Math.cos(sphere.rotation.y)
+  )
+}
+
 
 // ambient light
 
@@ -175,11 +201,9 @@ function animate() {
 
   sphere.rotation.y += earthRotation
 
-  loc.position.set(
-    locX * Math.cos(sphere.rotation.y) + locZ * Math.sin(sphere.rotation.y),
-    locY,
-    - locX * Math.sin(sphere.rotation.y) + locZ * Math.cos(sphere.rotation.y)
-  )
+  for (let i = 0; i < locationsList.length; i++){
+    rotateLocation(locationsList[i], i)
+  }
 
   controls.update()
 }
