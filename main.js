@@ -119,11 +119,6 @@ camera.position.z = 15
 const raycaster = new THREE.Raycaster()
 const mouseVec = new THREE.Vector2()
 
-const mouse = {
-  x: 0,
-  y: 0
-}
-
 const controls = new OrbitControls(camera, canvasContainer)
 
 let selectedLoc = null;
