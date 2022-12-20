@@ -91,7 +91,7 @@ let locXYZList = new Array()
 
 function addLocation(index){
   let loc = new THREE.Mesh( locGeometry, locMaterial)
-  loc.name = LOC_NAME
+  loc.name = `${LOC_NAME}${index}`
 
   let lat = locations[index].lat
   let lon = locations[index].lon
@@ -149,15 +149,15 @@ const controls = new OrbitControls(camera, canvasContainer)
 
 let selectedLoc = null;
 
-function selectLoc(){
+function selectLoc(index){
   earthRotation = 0;
   selectedLoc.geometry = new THREE.SphereGeometry(0.2, 24, 24)
   const overlay = document.querySelector('.location');
   overlay.classList.remove('hidden')
 
-  overlay.querySelector('h1').innerHTML = locations[1].name
-  overlay.querySelector('.img-wrapper').innerHTML = `<img src=${locations[1].imgPath}>`
-  overlay.querySelector('.overlay-p').innerHTML = locations[1].description
+  overlay.querySelector('h1').innerHTML = locations[index].name
+  overlay.querySelector('.img-wrapper').innerHTML = `<img src=${locations[index].imgPath}>`
+  overlay.querySelector('.overlay-p').innerHTML = locations[index].description
 }
 
 function unselectLoc(){
@@ -176,9 +176,9 @@ function onClick(event){
   if (intersects.length > 0) {
     selectedLoc = intersects[0].object
     console.log(selectedLoc.name)
-    console.log(selectedLoc.geometry)
-    if (selectedLoc.name === LOC_NAME){
-      selectLoc()
+    if (selectedLoc.name.includes(LOC_NAME)){
+      let locIndex = selectedLoc.name.split(LOC_NAME)[1] * 1
+      selectLoc(locIndex)
     }
   }
 }
