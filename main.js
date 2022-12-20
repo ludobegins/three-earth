@@ -6,6 +6,7 @@ import fragmentShader from './shaders/fragment.glsl'
 import atmosphereVertexShader from './shaders/atmosphereVertex.glsl'
 import atmosphereFragmentShader from './shaders/atmosphereFragment.glsl'
 
+import { locations } from './locations'
 
 const canvasContainer = document.querySelector('#canvasContainer')
 
@@ -94,8 +95,8 @@ const locMaterial = new THREE.MeshStandardMaterial({color: 0xFF0000})
 const loc = new THREE.Mesh( locGeometry, locMaterial)
 loc.name = LOC_NAME
 
-let lat = -5.88
-let lon = -35.17
+let lat = locations[0].lat
+let lon = locations[0].lon
 
 lat = ( lat ) * Math.PI / 180
 lon = ( lon ) * Math.PI / 180 + Math.PI / 2
@@ -133,9 +134,9 @@ function selectLoc(){
   const overlay = document.querySelector('.location');
   overlay.classList.remove('hidden')
 
-  overlay.querySelector('h1').innerHTML = 'Natal'
-  overlay.querySelector('.img-wrapper').innerHTML = "<img src='img/natal.jpg'>"
-  overlay.querySelector('.overlay-p').innerHTML = 'Natal means Christmas, and we actually go there every Christmas. Beautiful beaches and quality time with the family!'
+  overlay.querySelector('h1').innerHTML = locations[0].name
+  overlay.querySelector('.img-wrapper').innerHTML = `<img src=${locations[0].imgPath}>`
+  overlay.querySelector('.overlay-p').innerHTML = locations[0].description
 }
 
 function unselectLoc(){
