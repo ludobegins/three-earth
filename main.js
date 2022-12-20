@@ -141,7 +141,13 @@ function selectLoc(){
 
 function unselectLoc(){
   earthRotation = EARTH_BASE_ROTATION
+  selectedLoc.geometry = locGeometry
+  const overlay = document.querySelector('.location');
+  overlay.classList.add('hidden')
 }
+
+const close = document.getElementById( 'close' );
+close.addEventListener( 'click', unselectLoc );
 
 function onClick(event){
   raycaster.setFromCamera(mouseVec, camera)
@@ -162,7 +168,6 @@ function onMouseMove ( event ) {
   mouseVec.y = - ( event.clientY / canvasContainer.offsetHeight ) * 2 + 1
 
 }
-
 
 
 canvasContainer.addEventListener('mousemove', onMouseMove, false)
