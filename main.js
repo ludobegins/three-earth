@@ -155,9 +155,9 @@ function selectLoc(){
   const overlay = document.querySelector('.location');
   overlay.classList.remove('hidden')
 
-  overlay.querySelector('h1').innerHTML = locations[0].name
-  overlay.querySelector('.img-wrapper').innerHTML = `<img src=${locations[0].imgPath}>`
-  overlay.querySelector('.overlay-p').innerHTML = locations[0].description
+  overlay.querySelector('h1').innerHTML = locations[1].name
+  overlay.querySelector('.img-wrapper').innerHTML = `<img src=${locations[1].imgPath}>`
+  overlay.querySelector('.overlay-p').innerHTML = locations[1].description
 }
 
 function unselectLoc(){
