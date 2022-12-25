@@ -162,9 +162,9 @@ function selectLoc(index){
 
 function unselectLoc(){
   earthRotation = EARTH_BASE_ROTATION
-  selectedLoc.geometry = locGeometry
   const overlay = document.querySelector('.location');
   overlay.classList.add('hidden')
+  selectedLoc.geometry = locGeometry
 }
 
 const close = document.getElementById( 'close' );
@@ -173,14 +173,13 @@ close.addEventListener( 'click', unselectLoc );
 function onClick(event){
   raycaster.setFromCamera(mouseVec, camera)
   let intersects = raycaster.intersectObjects(scene.children)
-  if (intersects.length > 0) {
-    selectedLoc = intersects[0].object
-    console.log(selectedLoc.name)
-    if (selectedLoc.name.includes(LOC_NAME)){
-      let locIndex = selectedLoc.name.split(LOC_NAME)[1] * 1
-      selectLoc(locIndex)
-    }
-  }
+
+  if (intersects.length <= 0) return
+  if (!intersects[0].object.name.includes(LOC_NAME)) return 
+
+  selectedLoc = intersects[0].object
+  let locIndex = selectedLoc.name.split(LOC_NAME)[1] * 1
+  selectLoc(locIndex)
 }
 
 function onMouseMove ( event ) {
