@@ -83,14 +83,14 @@ scene.add(stars)
 
 // locations
 
-const locGeometry = new THREE.SphereGeometry(0.08, 24, 24)
-const locMaterial = new THREE.MeshStandardMaterial({color: 0xFF0000})
+const LOC_GEOMETRY = new THREE.SphereGeometry(0.08, 24, 24)
+const LOC_MATERIAL = new THREE.MeshStandardMaterial({color: 0xFF0000})
 
 let locationsList = new Array()
 let locXYZList = new Array()
 
 function addLocation(index){
-  let loc = new THREE.Mesh( locGeometry, locMaterial)
+  let loc = new THREE.Mesh( LOC_GEOMETRY, LOC_MATERIAL)
   loc.name = `${LOC_NAME}${index}`
 
   let lat = locations[index].lat
@@ -147,11 +147,14 @@ const mouseVec = new THREE.Vector2()
 
 const controls = new OrbitControls(camera, canvasContainer)
 
-let selectedLoc = null;
+let selectedLoc = [];
+
+// TO DO CODE CLEAN essa bagunça das locs
 
 function selectLoc(index){
+  if (selectedLoc.length >= 2) unselectLoc(2);
   earthRotation = 0;
-  selectedLoc.geometry = new THREE.SphereGeometry(0.2, 24, 24)
+  selectedLoc[selectedLoc.length - 1].geometry = new THREE.SphereGeometry(0.2, 24, 24)
   const overlay = document.querySelector('.location');
   overlay.classList.remove('hidden')
 
@@ -160,15 +163,15 @@ function selectLoc(index){
   overlay.querySelector('.overlay-p').innerHTML = locations[index].description
 }
 
-function unselectLoc(){
+function unselectLoc(unselectIndex = 1){
   earthRotation = EARTH_BASE_ROTATION
   const overlay = document.querySelector('.location');
   overlay.classList.add('hidden')
-  selectedLoc.geometry = locGeometry
+  selectedLoc[selectedLoc.length - unselectIndex].geometry = LOC_GEOMETRY
 }
 
 const close = document.getElementById( 'close' );
-close.addEventListener( 'click', unselectLoc );
+close.addEventListener( 'click', () => unselectLoc() );
 
 function onClick(event){
   raycaster.setFromCamera(mouseVec, camera)
@@ -177,8 +180,9 @@ function onClick(event){
   if (intersects.length <= 0) return
   if (!intersects[0].object.name.includes(LOC_NAME)) return 
 
-  selectedLoc = intersects[0].object
-  let locIndex = selectedLoc.name.split(LOC_NAME)[1] * 1
+  if (selectedLoc.length >= 2) selectedLoc.shift()
+  selectedLoc.push(intersects[0].object)
+  let locIndex = selectedLoc[selectedLoc.length - 1].name.split(LOC_NAME)[1] * 1
   selectLoc(locIndex)
 }
 
