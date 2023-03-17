@@ -1,9 +1,9 @@
-@import url("https://use.typekit.net/jmk3xov.css");
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
 
 :root {
   --dark-bg: rgba(15, 15, 15, 0.97);
 
-  font-family: brandon-grotesque, sans-serif;
+  font-family: 'Roboto', sans-serif;
   font-weight: 400;
   font-style: normal;
 }
@@ -40,12 +40,6 @@ body {
 
 canvas {
   display: block;
-}
-
-h1, h2, h3, blockquote {
-  font-family: elevon, sans-serif;
-  font-weight: 700;
-  font-style: normal;
 }
 
 header {
