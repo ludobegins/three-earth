@@ -61,7 +61,6 @@ blockquote p {
 
 .sub-text p {
   font-size: 2rem;
-  margin: 0;
 }
 
 .location {
@@ -76,6 +75,10 @@ blockquote p {
 
 .hidden {
   display: none;
+}
+
+.note {
+  font-size: 24px !important;
 }
 
 .overlay-container {
